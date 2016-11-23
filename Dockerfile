@@ -1,5 +1,5 @@
 # 这是迅雷云监工的docker程序
-# 云监工原作者powergx,所有贡献者以及CCTV
+# 云监工原作者powergx,所有贡献者,所有被我抄袭的大神以及CCTV
 
 FROM tutum/ubuntu:trusty
 
@@ -10,7 +10,7 @@ RUN rm /bin/sh &&  ln -s /bin/bash /bin/sh
 RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 #更新，安装git，wget，sudo
-RUN apt-get update && apt-get install -y git wget sudo vim nginx
+RUN apt-get update && apt-get install -y sudo git wget vim nginx
 
 #创建工作目录
 RUN mkdir /app 
@@ -24,17 +24,18 @@ VOLUME ["/var/lib/redis"]
 
 #安装python，redis
 RUN apt-get install -y python3.4 python3.4-dev redis-server
-RUN chmod +x ./crysadm/get-pip.py
-RUN python3.4 ./crysadm/get-pip.py
-RUN pip3.4 install redis && sudo pip3.4 install requests && sudo pip3.4 install flask
+RUN wget https://bootstrap.pypa.io/get-pip.py
+RUN python3.4 get-pip.py
+RUN pip3.4 install redis && pip3.4 install requests && pip3.4 install flask
 
 #复制配置文件
 RUN mv /etc/nginx/sites-available/default ./
 COPY default /etc/nginx/sites-available/
+COPY run.sh ./
 RUN apt-get clean 
 
 #脚本加运行权限
-RUN chmod +x ./crysadm/run.sh ./crysadm/down.sh ./crysadm/setup.sh  ./crysadm/cron.sh
+RUN chmod +x ./run.sh
 
 #设置容器端口
 #云监工端口
