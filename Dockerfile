@@ -13,19 +13,20 @@ RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 RUN apt-get update && apt-get install -y sudo git wget vim nginx
 
 #创建工作目录
-RUN mkdir /app 
-WORKDIR /app
+RUN mkdir /www
+WORKDIR /www
 
 #下载云监工源代码
-RUN git clone https://github.com/ccav14/crysadm.git
+RUN git clone https://github.com/HuiMi24/crysadm.git
 
 #redis数据库保存目录
 VOLUME ["/var/lib/redis"]
 
 #安装python，redis
-RUN apt-get install -y python3.4 python3.4-dev redis-server
+RUN apt-get install -y python3.4 python3.4-dev redis-server 
 RUN wget https://bootstrap.pypa.io/get-pip.py
 RUN python3.4 get-pip.py
+RUN python3.4 -m pip install uwsgi
 RUN pip3.4 install redis && pip3.4 install requests && pip3.4 install flask
 
 #复制配置文件
